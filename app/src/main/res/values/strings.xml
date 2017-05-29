@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">PetBuddy</string>
+
+    <string name="pet_name">Name</string>
+    <string name="pet_name_hint">Enter pet\'s name</string>
+    <string name="pet_bday">Birthday</string>
+    <string name="pet_bday_hint">Enter pet\'s birthday</string>
+    <string name="pet_type">Pet type</string>
+    <string name="pet_type_hint">Is your pet a cat, dog, bunny, etc</string>
+    <string name="pet_fav_food">Favorite food</string>
+    <string name="pet_fav_food_hint">Enter your pet\'s favorite food</string>
+    <string name="pet_happiness_lvl">Happiness level</string>
+    <string name="pet_fed">Tummy full!</string>
+    <string name="pet_hungry">I\'m hungry!</string>
+
+</resources>
