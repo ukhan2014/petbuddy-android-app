@@ -5,125 +5,44 @@
     android:layout_height="match_parent"
     android:background="@color/colorBackground"
 
-    tools:context="petbuddy.kodiakapps.com.broadcastsender.MainActivity">
+    tools:context="com.kodiakapps.petbuddy.MainActivity">
 
     <TextView
-        android:id="@+id/tvPetName"
+        android:id="@+id/result_textview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingLeft="5dp"
-        android:paddingTop="5dp"
-        android:paddingBottom="5dp"
-        android:text="@string/pet_name"
-        android:textColor="@color/colorText"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    <EditText
-        android:id="@+id/etPetName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/tvPetName"
-        android:textColor="@color/colorText"
-        android:hint="@string/pet_name_hint"
+        android:text=""
+        android:textSize="22sp"
+        android:freezesText="true"
         android:gravity="center"
-        android:textColorHint="@color/colorSeparator"
-        android:ems="10"
-        android:inputType="text"
-        />
-
-    <TextView
-        android:id="@+id/tvPetBday"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/etPetName"
-        android:text="@string/pet_bday"
-        android:textColor="@color/colorText"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:layout_marginTop="63dp" />
 
-    <EditText
-        android:id="@+id/etPetBday"
+    <Button
+        android:id="@+id/scan_barcode_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/tvPetBday"
+        android:text="@string/scan_barcode_button"
+        android:background="@color/colorAccent"
         android:textColor="@color/colorText"
-        android:hint="@string/pet_bday_hint"
-        android:gravity="center"
-        android:textColorHint="@color/colorSeparator"
-        android:ems="10"
-        android:inputType="textPersonName" />
-
-    <TextView
-        android:id="@+id/tvPetType"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_below="@+id/result_textview"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/tvPetBday"
-        android:textColor="@color/colorText"
-        android:layout_marginTop="51dp"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="@string/pet_type" />
+        android:layout_alignParentStart="true" />
 
-    <EditText
-        android:id="@+id/etPetType"
+    <Button
+        android:id="@+id/buttonFind"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/tvPetType"
+        android:background="@color/colorAccent"
         android:textColor="@color/colorText"
-        android:hint="@string/pet_type_hint"
-        android:gravity="center"
-        android:textColorHint="@color/colorSeparator"
-        android:ems="10"
-        android:inputType="textPersonName" />
-
-    <TextView
-        android:id="@+id/tvPetFavFood"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_below="@+id/scan_barcode_button"
+        android:layout_marginTop="30dp"
+        android:text="Find Your petbuddy"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/tvPetType"
-        android:textColor="@color/colorText"
-        android:layout_marginTop="54dp"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="@string/pet_fav_food" />
-
-    <EditText
-        android:id="@+id/etPetType"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/tvPetFavFood"
-        android:textColor="@color/colorText"
-        android:hint="@string/pet_fav_food_hint"
-        android:gravity="center"
-        android:textColorHint="@color/colorSeparator"
-        android:ems="10"
-        android:inputType="textPersonName" />
-
-    
-    <LinearLayout
-        android:id="@+id/ButtonBar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/etPetType"
-        android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:orientation="horizontal">
+        android:layout_alignParentStart="true" />
 
 
-
-
-
-
-    </LinearLayout>
 
 </RelativeLayout>
