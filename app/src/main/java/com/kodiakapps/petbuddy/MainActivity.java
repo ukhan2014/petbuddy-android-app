@@ -17,10 +17,10 @@ import com.kodiakapps.petbuddy.barcode.BarcodeCaptureActivity;
 public class MainActivity extends AppCompatActivity {
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
     private static final int BARCODE_READER_REQUEST_CODE = 1;
-    private static final String WIFI_NAME = "deviceName";
+    private static final String DEVICE_SERIAL = "serialno";
 
     private TextView mResultTextView;
-    private String mPetBuddyDeviceName = "";
+    private String mPetBuddyDeviceSerial = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,12 +41,12 @@ public class MainActivity extends AppCompatActivity {
         Button findPetBuddyButton = (Button) findViewById(R.id.buttonFind);
         findPetBuddyButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View arg0) {
-                if(mPetBuddyDeviceName == "") {
+                if(mPetBuddyDeviceSerial == "") {
                     Toast.makeText(getApplicationContext(), "First scan your PetBuddy QR Code",
                             Toast.LENGTH_LONG).show();
                 } else {
                     Intent myIntent = new Intent(MainActivity.this, SearchSSIDs.class);
-                    myIntent.putExtra(WIFI_NAME, mPetBuddyDeviceName);
+                    myIntent.putExtra(DEVICE_SERIAL, mPetBuddyDeviceSerial);
                     startActivity(myIntent);
                 }
             }
@@ -60,8 +60,8 @@ public class MainActivity extends AppCompatActivity {
                 if (data != null) {
                     Barcode barcode = data.getParcelableExtra(BarcodeCaptureActivity.BarcodeObject);
                     Point[] p = barcode.cornerPoints;
-                    mPetBuddyDeviceName = barcode.displayValue;
-                    mResultTextView.setText("Your PetBuddy WiFi is: " + mPetBuddyDeviceName);
+                    mPetBuddyDeviceSerial = barcode.displayValue;
+                    mResultTextView.setText("Your PetBuddy WiFi is: " + mPetBuddyDeviceSerial);
                 } else mResultTextView.setText(R.string.no_barcode_captured);
             } else Log.e(LOG_TAG, String.format(getString(R.string.barcode_error_format),
                     CommonStatusCodes.getStatusCodeString(resultCode)));
