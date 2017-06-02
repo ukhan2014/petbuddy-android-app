@@ -6,12 +6,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.wifi.ScanResult;
+import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,6 +26,9 @@ import java.util.List;
 
 public class SearchSSIDs extends Activity implements View.OnClickListener
 {
+    private static final String DEVICE_SERIAL = "serialno";
+    private String deviceName = "";
+
     WifiManager wifi;
     ListView lv;
     TextView textStatus;
@@ -41,6 +45,23 @@ public class SearchSSIDs extends Activity implements View.OnClickListener
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.search_ssid);
+
+        final String serialno;
+        if (savedInstanceState == null) {
+            Bundle extras = getIntent().getExtras();
+            if(extras == null) {
+                serialno= null;
+            } else {
+                serialno= extras.getString(DEVICE_SERIAL);
+            }
+        } else {
+            serialno= (String) savedInstanceState.getSerializable(DEVICE_SERIAL);
+        }
+
+        deviceName = "PBD" + serialno;
+
+        Log.d("USMAN", "deviceName is: " + deviceName);
+        Log.d("USMAN", "PSK is: " + serialno);
 
         textStatus = (TextView) findViewById(R.id.textStatus);
         buttonScan = (Button) findViewById(R.id.buttonScan);
@@ -62,11 +83,26 @@ public class SearchSSIDs extends Activity implements View.OnClickListener
                 Toast.makeText(getApplicationContext(), "got Scan Results", Toast.LENGTH_LONG).show();
                 textStatus.setText("Receiving");
                 results = wifi.getScanResults();
-                if(results.toString().contains("Elo_Guest")) {
-                    Toast.makeText(getApplicationContext(), "Elo_Guest Found", Toast.LENGTH_LONG).show();
+                if(results.toString().contains(deviceName)) {
+                    Toast.makeText(getApplicationContext(), "PetBuddy Found!", Toast.LENGTH_LONG).show();
+
+                    WifiConfiguration myWiFiConfig = new WifiConfiguration();
+                    myWiFiConfig.preSharedKey = "\"" + serialno + "\"";
+                    myWiFiConfig.SSID = "\"" + deviceName + "\"";
+                    myWiFiConfig.status = WifiConfiguration.Status.ENABLED;
+                    myWiFiConfig.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.TKIP);
+                    myWiFiConfig.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.CCMP);
+                    myWiFiConfig.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.WPA_PSK);
+                    myWiFiConfig.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.TKIP);
+                    myWiFiConfig.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.CCMP);
+                    myWiFiConfig.allowedProtocols.set(WifiConfiguration.Protocol.RSN);
+                    int res = wifi.addNetwork(myWiFiConfig);
+                    Log.d("USMAN", "addNetwork returned " + res );
+                    boolean  networkEnabled = wifi.enableNetwork(res, true);
+                    Log.d("USMAN", "enableNetwork returned " + networkEnabled );
                 }
                 else {
-                    Toast.makeText(getApplicationContext(), "Not Found", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "Could not find your PetBuddy :(", Toast.LENGTH_LONG).show();
                 }
 
             }
