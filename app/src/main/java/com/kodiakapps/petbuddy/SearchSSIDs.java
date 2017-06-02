@@ -26,6 +26,7 @@ public class SearchSSIDs extends Activity implements View.OnClickListener
     private static final String TAG = "PetBuddy";
     private static final String DEVICE_SERIAL = "serialno";
     private String deviceName = "";
+    private String serialno;
     private String homeWifiSSID = "";
     private String homeWifiPSK = "";
 
@@ -44,6 +45,22 @@ public class SearchSSIDs extends Activity implements View.OnClickListener
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.search_ssid);
+
+        if (savedInstanceState == null) {
+            Bundle extras = getIntent().getExtras();
+            if(extras == null) {
+                serialno= null;
+            } else {
+                serialno= extras.getString(DEVICE_SERIAL);
+            }
+        } else {
+            serialno= (String) savedInstanceState.getSerializable(DEVICE_SERIAL);
+        }
+
+        deviceName = "PBD" + serialno;
+
+        Log.d(TAG, "deviceName is: " + deviceName);
+        Log.d(TAG, "PSK is: " + serialno);
 
         textStatus = (TextView) findViewById(R.id.textStatus);
         textStatus.setVisibility(View.INVISIBLE);
