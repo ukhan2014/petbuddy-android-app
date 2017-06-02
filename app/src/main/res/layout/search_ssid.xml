@@ -8,30 +8,70 @@
         android:id="@+id/textStatus"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginLeft="51dp"
-        android:layout_marginStart="51dp"
-        android:layout_marginTop="30dp"
-        android:text="Status" />
+        android:text="Status"
+        android:layout_alignBottom="@+id/buttonScan"
+        android:layout_centerHorizontal="true" />
 
     <Button
         android:id="@+id/buttonScan"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="scan"
-        android:layout_below="@+id/textStatus"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="112dp" />
+        android:text="connect"
+        android:layout_below="@+id/connectNetworkTV"
+        android:layout_alignEnd="@+id/connectNetworkTV" />
 
-    <ListView
-        android:id="@+id/list"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/buttonScan"
-        android:layout_marginTop="38dp"
+    <TextView
+        android:id="@+id/enterWifiInfo"
+        android:layout_width="280dp"
+        android:layout_height="wrap_content"
+        android:text="@string/home_wifi_info"
+        android:layout_alignParentTop="false"
+        android:layout_alignLeft="@+id/textStatus"
+        android:layout_alignStart="@+id/textStatus"
+        android:layout_marginTop="30dp" />
+
+    <EditText
+        android:id="@+id/enterSsid"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/enterWifiInfo"
+        android:layout_alignStart="@+id/enterWifiInfo"
+        android:layout_below="@+id/enterWifiInfo"
+        android:ems="10"
+        android:hint="WiFi name"
+        android:inputType="textPersonName" />
+
+    <EditText
+        android:id="@+id/enterPsk"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/enterSsid"
+        android:layout_alignStart="@+id/enterSsid"
+        android:layout_below="@+id/enterSsid"
+        android:ems="10"
+        android:hint="Password"
+        android:inputType="textPassword" />
+
+    <Button
+        android:id="@+id/submitWifiInfoButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/enterPsk"
+        android:layout_alignBottom="@+id/enterPsk"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_marginEnd="18dp"
+        android:layout_marginRight="18dp"
+        android:text="submit" />
+
+    <TextView
+        android:id="@+id/connectNetworkTV"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:text="@string/connect_device_info"
+        android:layout_below="@+id/submitWifiInfoButton"
+        android:layout_alignLeft="@+id/enterPsk"
+        android:layout_alignStart="@+id/enterPsk"
+        android:layout_marginTop="45dp" />
 
 </RelativeLayout>
