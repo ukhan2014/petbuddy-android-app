@@ -51,6 +51,14 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
+        Button registerPetBuddyButton = (Button) findViewById(R.id.buttonRegister);
+        registerPetBuddyButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View arg0) {
+                    Intent myIntent = new Intent(MainActivity.this, RegisterActivity.class);
+                    startActivity(myIntent);
+            }
+        });
     }
 
     @Override

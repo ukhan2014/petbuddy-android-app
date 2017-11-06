@@ -27,5 +27,27 @@
 
     <string name="connect_device_info">"Now let's try and get your PetBuddy device connected to your home network:"</string>
     <string name="home_wifi_info">"We need your home WiFi info so that PetBuddy can connect to the Internet:"</string>
+    <string name="title_activity_register">Register</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password (optional)</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_password">This password is too short</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_field_required">This field is required</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email
+        completions."
+    </string>
+
+    <!-- Strings related to registration activity -->
+    <string name="regactivity_title">Register your PetBuddy:</string>
+    <string name="regactivity_fname">First Name</string>
+    <string name="regactivity_lname">Last Name</string>
+    <string name="regactivity_email">E-mail address</string>
+    <string name="regactivity_pwd">Pick a Password</string>
+    <string name="regactivity_submitbtn">submit</string>
 
 </resources>
