@@ -1,0 +1,13 @@
+package com.kodiakapps.petbuddy;
+
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+
+public class WifiScanActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_wifi_scan);
+    }
+}

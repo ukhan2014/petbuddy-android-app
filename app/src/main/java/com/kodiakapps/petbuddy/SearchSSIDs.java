@@ -88,7 +88,7 @@ public class SearchSSIDs extends Activity implements View.OnClickListener
             serialno= (String) savedInstanceState.getSerializable(DEVICE_SERIAL);
         }
 
-        deviceName = "PBD" + serialno;
+        deviceName = "PB" + serialno;
 
         Log.d(TAG, "deviceName is: " + deviceName);
         Log.d(TAG, "PSK is: " + serialno);
