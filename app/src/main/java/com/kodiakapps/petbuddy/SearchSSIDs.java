@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import java.util.List;
@@ -31,6 +32,7 @@ public class SearchSSIDs extends Activity {
     TextView textStatus;
     TextView connectNetworkTV;
     List<ScanResult> results;
+    ImageView iw;
 
     /* Called when the activity is first created. */
     @Override
@@ -58,6 +60,8 @@ public class SearchSSIDs extends Activity {
         textStatus.setVisibility(View.VISIBLE);
         connectNetworkTV = (TextView) findViewById(R.id.connectNetworkTV);
         connectNetworkTV.setVisibility(View.VISIBLE);
+        iw = (ImageView) findViewById(R.id.status_indicator_light);
+        iw.setImageResource(R.drawable.redlight);
 
         Log.d(TAG, "buttons and textstatuses done");
 
@@ -113,6 +117,10 @@ public class SearchSSIDs extends Activity {
                     Log.d(TAG, "addNetwork returned " + res);
                     boolean networkEnabled = wifi.enableNetwork(res, true);
                     Log.d(TAG, "enableNetwork returned " + networkEnabled);
+                    if(networkEnabled) {
+                        textStatus.setText("Connected!");
+                        iw.setImageResource(R.drawable.greenlight);
+                    }
                 } else {
                     Toast.makeText(getApplicationContext(), "Could not find your PetBuddy :(", Toast.LENGTH_LONG).show();
                 }
