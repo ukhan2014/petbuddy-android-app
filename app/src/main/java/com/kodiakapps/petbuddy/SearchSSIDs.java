@@ -9,6 +9,7 @@ import android.net.wifi.ScanResult;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -33,12 +34,16 @@ public class SearchSSIDs extends Activity {
     TextView connectNetworkTV;
     List<ScanResult> results;
     ImageView iw;
+    Handler mHandler;
+    boolean exitActivityFirstRun = false;
+    int exitActivityRuns = 0;
 
     /* Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.search_ssid);
+        mHandler = new Handler();
 
         if (savedInstanceState == null) {
             Bundle extras = getIntent().getExtras();
@@ -93,6 +98,20 @@ public class SearchSSIDs extends Activity {
         Toast.makeText(this, "Scanning...", Toast.LENGTH_SHORT).show();
         textStatus.setText("Scanning");
 
+
+        final Runnable exitActivityTask = new Runnable() {
+            public void run() {
+                if(exitActivityRuns != 10) {
+                    exitActivityRuns++;
+                    blinkConnectedText();
+                    mHandler.postDelayed(this, 150);
+                } else {
+                    mHandler.removeCallbacksAndMessages(null);
+                    finish();
+                }
+            }
+        };
+
         registerReceiver(new BroadcastReceiver() {
             @Override
             public void onReceive(Context c, Intent intent) {
@@ -120,6 +139,11 @@ public class SearchSSIDs extends Activity {
                     if(networkEnabled) {
                         textStatus.setText("Connected!");
                         iw.setImageResource(R.drawable.greenlight);
+
+                        if(!exitActivityFirstRun) {
+                            exitActivityFirstRun = true;
+                            mHandler.postDelayed(exitActivityTask, 250);
+                        }
                     }
                 } else {
                     Toast.makeText(getApplicationContext(), "Could not find your PetBuddy :(", Toast.LENGTH_LONG).show();
@@ -127,5 +151,12 @@ public class SearchSSIDs extends Activity {
 
             }
         }, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
+    }
+
+    public void blinkConnectedText() {
+        if (textStatus.getVisibility() == View.VISIBLE)
+            textStatus.setVisibility(View.INVISIBLE);
+        else
+            textStatus.setVisibility(View.VISIBLE);
     }
 }
