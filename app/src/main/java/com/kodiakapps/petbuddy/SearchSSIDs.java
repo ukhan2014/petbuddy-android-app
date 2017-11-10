@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Point;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
@@ -17,6 +18,10 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.gms.vision.barcode.Barcode;
+import com.kodiakapps.petbuddy.barcode.BarcodeCaptureActivity;
+
 import java.util.List;
 
 /**
@@ -37,6 +42,7 @@ public class SearchSSIDs extends Activity {
     Handler mHandler;
     boolean exitActivityFirstRun = false;
     int exitActivityRuns = 0;
+    private BroadcastReceiver wifiReceiver;
 
     /* Called when the activity is first created. */
     @Override
@@ -45,16 +51,19 @@ public class SearchSSIDs extends Activity {
         setContentView(R.layout.search_ssid);
         mHandler = new Handler();
 
-        if (savedInstanceState == null) {
-            Bundle extras = getIntent().getExtras();
-            if (extras == null) {
-                serialno = null;
-            } else {
-                serialno = extras.getString(DEVICE_SERIAL);
-            }
-        } else {
-            serialno = (String) savedInstanceState.getSerializable(DEVICE_SERIAL);
-        }
+//        if (savedInstanceState == null) {
+//            Bundle extras = getIntent().getExtras();
+//            if (extras == null) {
+//                serialno = null;
+//            } else {
+//                serialno = extras.getString(DEVICE_SERIAL);
+//            }
+//        } else {
+//            serialno = (String) savedInstanceState.getSerializable(DEVICE_SERIAL);
+//        }
+
+        Barcode barcode = (Barcode)(getIntent().getExtras().get("Barcode"));
+        serialno = barcode.displayValue;
 
         deviceName = "PB" + serialno;
 
@@ -68,23 +77,6 @@ public class SearchSSIDs extends Activity {
         iw = (ImageView) findViewById(R.id.status_indicator_light);
         iw.setImageResource(R.drawable.redlight);
 
-        Log.d(TAG, "buttons and textstatuses done loading");
-
-        if (savedInstanceState == null) {
-            Bundle extras = getIntent().getExtras();
-            if (extras == null) {
-                serialno = null;
-            } else {
-                serialno = extras.getString(DEVICE_SERIAL);
-            }
-        } else {
-            serialno = (String) savedInstanceState.getSerializable(DEVICE_SERIAL);
-        }
-
-        deviceName = "PB" + serialno;
-
-        Log.d(TAG, "deviceName is: " + deviceName);
-        Log.d(TAG, "PSK is: " + serialno);
 
         wifi = (WifiManager) getSystemService(Context.WIFI_SERVICE);
         if (wifi.isWifiEnabled() == false) {
@@ -107,12 +99,16 @@ public class SearchSSIDs extends Activity {
                     mHandler.postDelayed(this, 150);
                 } else {
                     mHandler.removeCallbacksAndMessages(null);
+                    Intent intent = new Intent(SearchSSIDs.this, RegisterActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
                     finish();
                 }
             }
         };
 
-        registerReceiver(new BroadcastReceiver() {
+
+        wifiReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context c, Intent intent) {
                 Log.d(TAG, "onReceive()");
@@ -137,6 +133,7 @@ public class SearchSSIDs extends Activity {
                     boolean networkEnabled = wifi.enableNetwork(res, true);
                     Log.d(TAG, "enableNetwork returned " + networkEnabled);
                     if(networkEnabled) {
+                        unregisterReceiver(wifiReceiver);
                         textStatus.setText("Connected!");
                         iw.setImageResource(R.drawable.greenlight);
 
@@ -150,7 +147,9 @@ public class SearchSSIDs extends Activity {
                 }
 
             }
-        }, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
+        };
+
+        registerReceiver(wifiReceiver, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
     }
 
     public void blinkConnectedText() {
