@@ -68,7 +68,7 @@ public class SearchSSIDs extends Activity {
         iw = (ImageView) findViewById(R.id.status_indicator_light);
         iw.setImageResource(R.drawable.redlight);
 
-        Log.d(TAG, "buttons and textstatuses done");
+        Log.d(TAG, "buttons and textstatuses done loading");
 
         if (savedInstanceState == null) {
             Bundle extras = getIntent().getExtras();
