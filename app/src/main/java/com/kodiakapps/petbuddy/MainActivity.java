@@ -21,10 +21,6 @@ public class MainActivity extends AppCompatActivity {
 
     private TextView mResultTextView;
     private String mPetBuddyDeviceSerial = "";
-    private String fname = "";
-    private String lname = "";
-    private String email = "";
-    private String pwd = "";
 
 
     @Override
@@ -69,6 +65,14 @@ public class MainActivity extends AppCompatActivity {
         scanWiFiButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View arg0) {
                 Intent myIntent = new Intent(MainActivity.this, WifiScanActivity.class);
+                startActivity(myIntent);
+            }
+        });
+
+        Button startActivityButton = (Button) findViewById(R.id.buttonStartActivity);
+        startActivityButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View arg0) {
+                Intent myIntent = new Intent(MainActivity.this, StartActivity.class);
                 startActivity(myIntent);
             }
         });

@@ -51,7 +51,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".RegisterActivity" />
-        <activity android:name=".WifiScanActivity"></activity>
+        <activity android:name=".WifiScanActivity" />
+        <activity android:name=".StartActivity"></activity>
     </application>
 
 </manifest>

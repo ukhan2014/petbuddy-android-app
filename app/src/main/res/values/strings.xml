@@ -50,4 +50,7 @@
     <string name="regactivity_pwd">Pick a Password</string>
     <string name="regactivity_submitbtn">submit</string>
 
+    <!-- Strings related to start activity -->
+    <string name="title_tv">Let's get your PetBuddy all set up. When ready, hit start below</string>
+
 </resources>

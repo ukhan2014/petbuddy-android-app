@@ -44,6 +44,7 @@ import com.google.android.gms.vision.MultiProcessor;
 import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
 import com.kodiakapps.petbuddy.R;
+import com.kodiakapps.petbuddy.SearchSSIDs;
 import com.kodiakapps.petbuddy.camera.CameraSource;
 import com.kodiakapps.petbuddy.camera.CameraSourcePreview;
 
@@ -92,9 +93,11 @@ public final class BarcodeCaptureActivity extends AppCompatActivity
     @Override
     public void onDetectedQrCode(Barcode barcode) {
         if (barcode != null) {
-            Intent intent = new Intent();
+            Intent intent = new Intent(this, SearchSSIDs.class);
             intent.putExtra(BarcodeObject, barcode);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             setResult(CommonStatusCodes.SUCCESS, intent);
+            startActivity(intent);
             finish();
         }
     }
