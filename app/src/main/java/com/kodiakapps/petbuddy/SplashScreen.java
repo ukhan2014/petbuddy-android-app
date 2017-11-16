@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 public class SplashScreen extends Activity {
+    private String TAG = "PBD:SplashScreen";
     public void onAttachedToWindow() {
         super.onAttachedToWindow();
         Window window = getWindow();

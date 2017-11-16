@@ -15,7 +15,7 @@ import com.google.android.gms.vision.barcode.Barcode;
 import com.kodiakapps.petbuddy.barcode.BarcodeCaptureActivity;
 
 public class MainActivity extends AppCompatActivity {
-    private static final String LOG_TAG = MainActivity.class.getSimpleName();
+    private static final String TAG = "PBD:MainActivity";
     private static final int BARCODE_READER_REQUEST_CODE = 1;
     private static final String DEVICE_SERIAL = "serialno";
 
@@ -88,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
                     mPetBuddyDeviceSerial = barcode.displayValue;
                     mResultTextView.setText("Your PetBuddy WiFi is: " + mPetBuddyDeviceSerial);
                 } else mResultTextView.setText(R.string.no_barcode_captured);
-            } else Log.e(LOG_TAG, String.format(getString(R.string.barcode_error_format),
+            } else Log.e(TAG, String.format(getString(R.string.barcode_error_format),
                     CommonStatusCodes.getStatusCodeString(resultCode)));
         } else super.onActivityResult(requestCode, resultCode, data);
     }

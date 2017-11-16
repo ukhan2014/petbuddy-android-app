@@ -29,8 +29,7 @@ import java.util.List;
  */
 
 public class SearchSSIDs extends Activity {
-    private static final String TAG = "PetBuddy";
-    private static final String DEVICE_SERIAL = "serialno";
+    private static final String TAG = "PBD:SearchSSIDs";
     private String deviceName = "";
     private String serialno;
 
