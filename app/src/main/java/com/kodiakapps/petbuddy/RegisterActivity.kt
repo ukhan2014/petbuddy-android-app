@@ -62,7 +62,7 @@ class RegisterActivity : AppCompatActivity() {
                     RegJSON.put("pwd", pwd)
 
                     val myIntent = Intent(this@RegisterActivity,
-                            SendInfoToPbd::class.java)
+                            SendToPbdNew::class.java)
                     myIntent.putExtra("reginfo", RegJSON.toString())
                     startActivity(myIntent)
 
