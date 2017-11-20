@@ -6,9 +6,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Point;
+import android.net.ConnectivityManager;
+import android.net.DhcpInfo;
+import android.net.Network;
+import android.net.NetworkCapabilities;
+import android.net.NetworkInfo;
+import android.net.NetworkRequest;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -22,6 +29,9 @@ import android.widget.Toast;
 import com.google.android.gms.vision.barcode.Barcode;
 import com.kodiakapps.petbuddy.barcode.BarcodeCaptureActivity;
 
+import java.lang.reflect.Method;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.List;
 
 /**
@@ -128,10 +138,53 @@ public class SearchSSIDs extends Activity {
                     myWiFiConfig.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.CCMP);
                     myWiFiConfig.allowedProtocols.set(WifiConfiguration.Protocol.RSN);
                     int res = wifi.addNetwork(myWiFiConfig);
+
+//                    final ConnectivityManager connectivityManager  =
+//                            (ConnectivityManager)getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+//
+//                    NetworkRequest.Builder request = null;
+//                    if (android.os.Build.VERSION.SDK_INT >=
+//                            android.os.Build.VERSION_CODES.LOLLIPOP) {
+//                        request = new NetworkRequest.Builder();
+//
+//                        request.addTransportType(NetworkCapabilities.TRANSPORT_WIFI);
+//
+//                        connectivityManager.registerNetworkCallback(request.build(), new ConnectivityManager.NetworkCallback() {
+//
+//                            @Override
+//                            public void onAvailable(Network network) {
+//                                //if (SDK_INT >= LOLLIPOP && SDK_INT <= M) {
+//
+//                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//                                    Log.d(TAG, "setting default network to WIFI");
+//                                    ConnectivityManager.setProcessDefaultNetwork(network);
+//                                }
+//
+//                            }
+//                        });
+//                    }
+
                     Log.d(TAG, "addNetwork returned " + res);
                     boolean networkEnabled = wifi.enableNetwork(res, true);
+                    wifi.reconnect();
                     Log.d(TAG, "enableNetwork returned " + networkEnabled);
                     if(networkEnabled) {
+                        DhcpInfo dhcpInfo = wifi.getDhcpInfo();
+                        byte[] ipAddress = convert2Bytes(dhcpInfo.serverAddress);
+                        try {
+                            String apIpAddr = InetAddress.getByAddress(ipAddress).getHostAddress();
+                            Log.d(TAG, "IP address of AP = " + apIpAddr);
+                        } catch (UnknownHostException e) {
+                            e.printStackTrace();
+                        }
+
+
+
+                        //if(isAPNEnabled(getApplicationContext())) {
+//                            Log.d(TAG, "Disabling cell network Internet");
+//                            updateAPN(getApplicationContext(), false);
+                        //}
+
                         unregisterReceiver(wifiReceiver);
                         textStatus.setText("Connected!");
                         iw.setImageResource(R.drawable.greenlight);
@@ -150,6 +203,39 @@ public class SearchSSIDs extends Activity {
 
         registerReceiver(wifiReceiver, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
     }
+
+    private static byte[] convert2Bytes(int hostAddress) {
+        byte[] addressBytes = { (byte)(0xff & hostAddress),
+                (byte)(0xff & (hostAddress >> 8)),
+                (byte)(0xff & (hostAddress >> 16)),
+                (byte)(0xff & (hostAddress >> 24)) };
+        return addressBytes;
+    }
+
+    private static void updateAPN(Context paramContext, boolean enable) {
+        try {
+            ConnectivityManager connectivityManager = (ConnectivityManager)
+                    paramContext.getSystemService("connectivity");
+            Method setMobileDataEnabledMethod = ConnectivityManager.class.getDeclaredMethod(
+                    "setMobileDataEnabled", Boolean.TYPE);
+            setMobileDataEnabledMethod.setAccessible(true);
+            setMobileDataEnabledMethod.invoke(connectivityManager, enable);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static boolean isAPNEnabled(Context paramContext) {
+        try {
+            NetworkInfo networkInfo = ((ConnectivityManager) paramContext.getSystemService(
+                    "connectivity")).getActiveNetworkInfo();
+            return networkInfo.isConnected();
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+
 
     public void blinkConnectedText() {
         if (textStatus.getVisibility() == View.VISIBLE)
