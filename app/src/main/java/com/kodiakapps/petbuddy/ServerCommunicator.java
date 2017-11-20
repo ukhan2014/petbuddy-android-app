@@ -32,7 +32,7 @@ public class ServerCommunicator extends AsyncTask<String,Void,String> {
             System.out.println(SERVER_IP);
             InetAddress serverAddr = InetAddress.getByName(SERVER_IP);
             System.out.println("Created serverAddr "+ SERVER_IP);
-            Socket socket = new Socket(SERVER_IP,SERVER_PORT);
+            Socket socket = new Socket(serverAddr,SERVER_PORT);
             System.out.println("Socket created..");
             //sends the message to the server
             PrintWriter mBufferOut = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);
