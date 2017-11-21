@@ -21,7 +21,6 @@ import java.net.Socket;
 public class SendToPbdNew extends AppCompatActivity {
 
     private String TAG = "PBD:SendInfoToPbd";
-    public Context context;
     private TextView mTextViewReplyFromServer;
     private ProgressBar spinner;
 
@@ -41,6 +40,6 @@ public class SendToPbdNew extends AppCompatActivity {
         String regInfo = (String) getIntent().getExtras().get("reginfo");
         Log.d(TAG, "regInfo is: " + regInfo);
 
-        new ServerCommunicator(context.getApplicationContext()).execute();
+        new ServerCommunicator(getApplicationContext()).execute();
     }
 }
