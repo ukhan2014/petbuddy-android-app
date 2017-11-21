@@ -137,32 +137,34 @@ public class SearchSSIDs extends Activity {
                     myWiFiConfig.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.TKIP);
                     myWiFiConfig.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.CCMP);
                     myWiFiConfig.allowedProtocols.set(WifiConfiguration.Protocol.RSN);
-                    int res = wifi.addNetwork(myWiFiConfig);
+                    final int res = wifi.addNetwork(myWiFiConfig);
 
-//                    final ConnectivityManager connectivityManager  =
-//                            (ConnectivityManager)getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
-//
-//                    NetworkRequest.Builder request = null;
-//                    if (android.os.Build.VERSION.SDK_INT >=
-//                            android.os.Build.VERSION_CODES.LOLLIPOP) {
-//                        request = new NetworkRequest.Builder();
-//
-//                        request.addTransportType(NetworkCapabilities.TRANSPORT_WIFI);
-//
-//                        connectivityManager.registerNetworkCallback(request.build(), new ConnectivityManager.NetworkCallback() {
-//
-//                            @Override
-//                            public void onAvailable(Network network) {
-//                                //if (SDK_INT >= LOLLIPOP && SDK_INT <= M) {
-//
-//                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//                                    Log.d(TAG, "setting default network to WIFI");
-//                                    ConnectivityManager.setProcessDefaultNetwork(network);
-//                                }
-//
-//                            }
-//                        });
-//                    }
+                    final ConnectivityManager connectivityManager  =
+                            (ConnectivityManager)getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+
+                    NetworkRequest.Builder request = null;
+                    if (android.os.Build.VERSION.SDK_INT >=
+                            android.os.Build.VERSION_CODES.LOLLIPOP) {
+                        request = new NetworkRequest.Builder();
+
+                        request.addTransportType(NetworkCapabilities.TRANSPORT_WIFI);
+
+                        connectivityManager.registerNetworkCallback(request.build(), new ConnectivityManager.NetworkCallback() {
+
+                            @Override
+                            public void onAvailable(Network network) {
+                                //if (SDK_INT >= LOLLIPOP && SDK_INT <= M) {
+
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                                    Log.d(TAG, "setting default network to WIFI");
+                                    ConnectivityManager.setProcessDefaultNetwork(network);
+                                    wifi.enableNetwork(res, true);
+                                    wifi.reconnect();
+                                }
+
+                            }
+                        });
+                    }
 
                     Log.d(TAG, "addNetwork returned " + res);
                     boolean networkEnabled = wifi.enableNetwork(res, true);
