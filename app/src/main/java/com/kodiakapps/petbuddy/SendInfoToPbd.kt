@@ -41,13 +41,20 @@ class SendInfoToPbd : AppCompatActivity() {
         val thread = Thread(object:Runnable {
             override fun run() = try
             {
-                val s = Socket("192.168.1.2", 8234)
+                Log.d(TAG, "create socket")
+                val s = Socket("192.168.1.1", 8234)
+                Log.d(TAG, "socket created")
                 val out = s.getOutputStream()
                 val output = PrintWriter(out)
+
                 output.println(msg)
                 output.flush()
+                Log.d(TAG, "flush message")
+
                 val input = BufferedReader(InputStreamReader(s.getInputStream()))
                 val st = input.readLine()
+
+                Log.d(TAG, "try to get response")
                 handler.post(object:Runnable {
                     override fun run() {
                         if (st.trim({ it <= ' ' }).length != 0) {
@@ -57,9 +64,12 @@ class SendInfoToPbd : AppCompatActivity() {
                         }
                     }
                 })
+
+                Log.d(TAG, "Close up shop")
                 output.close()
                 out.close()
                 s.close()
+
             }
             catch (e: IOException) {
                 e.printStackTrace()
