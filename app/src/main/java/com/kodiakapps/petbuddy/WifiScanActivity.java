@@ -9,6 +9,7 @@ import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -23,17 +24,16 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
-public class WifiScanActivity extends Activity implements View.OnClickListener
+public class WifiScanActivity extends Activity
 {
+    private final String TAG = "PBD:WiFiScanActivity";
+
     WifiManager wifi;
     ListView lv;
-    TextView textStatus;
-    Button buttonScan;
-    int size = 0;
-    List<ScanResult> results;
 
-    String ITEM_KEY = "key";
     ArrayList<HashMap<String, String>> arraylist = new ArrayList<HashMap<String, String>>();
+    String ITEM_KEY = "key";
+
     SimpleAdapter adapter;
 
     /* Called when the activity is first created. */
@@ -43,9 +43,6 @@ public class WifiScanActivity extends Activity implements View.OnClickListener
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wifi_scan);
 
-        textStatus = (TextView) findViewById(R.id.textStatus);
-        buttonScan = (Button) findViewById(R.id.buttonScan);
-        buttonScan.setOnClickListener(this);
         lv = (ListView)findViewById(R.id.list);
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -63,6 +60,8 @@ public class WifiScanActivity extends Activity implements View.OnClickListener
             wifi.setWifiEnabled(true);
         }
         wifi.startScan();
+        Toast.makeText(this, "Scanning....", Toast.LENGTH_SHORT).show();
+
         this.adapter = new SimpleAdapter(WifiScanActivity.this, arraylist, R.layout.row,
                 new String[] { ITEM_KEY }, new int[] { R.id.list_value });
         lv.setAdapter(this.adapter);
@@ -72,50 +71,70 @@ public class WifiScanActivity extends Activity implements View.OnClickListener
             @Override
             public void onReceive(Context c, Intent intent)
             {
+                int size = 0;
+                List<ScanResult> results;
+
+                // Create Temporary HashMap
+                HashMap<String, ScanResult> resultHashMap =
+                        new HashMap<String, ScanResult>();
+                // Add to new List
+                List<ScanResult> sortedWifiList = new ArrayList<>();
+                resultHashMap.clear();
+
                 results = wifi.getScanResults();
-                size = results.size();
+                Log.d(TAG, "size of results is " + results.size());
+                // Add ScanResults to Map to remove duplicates
+                for (ScanResult scanResult : results) {
+                    if (scanResult.SSID != null &&
+                            !scanResult.SSID.isEmpty()) {
+                        resultHashMap.put(scanResult.SSID, scanResult);
+                        sortedWifiList.clear();
+                        sortedWifiList.addAll(resultHashMap.values());
+
+                        size = sortedWifiList.size();
+                        // Create Comparator to sort by level
+                        Comparator<ScanResult> comparator =
+                                new Comparator<ScanResult>() {
+                                    @Override
+                                    public int compare(ScanResult lhs, ScanResult rhs) {
+                                        //Log.d(TAG, lhs.SSID+":"+lhs.level+"  "+rhs.SSID+":"+rhs.level);
+                                        if(lhs.level < rhs.level) {
+                                            return -1;
+                                        } else if(lhs.level == rhs.level) {
+                                            return 0;
+                                        } else {
+                                            return 1;
+                                        }
+                                    }
+                                };
+
+                        // Apply Comparator and sort
+                        Collections.sort(sortedWifiList, comparator);
+
+                        Log.d(TAG, "got new wifi scan results");
+                    }
+
+                    size = size - 1;
+                    arraylist.clear();
+                    while (size >= 0) {
+                        String ssid = sortedWifiList.get(size).SSID;
+                        int level = sortedWifiList.get(size).level;
+
+                        Log.d(TAG, "size="+size+" ssid="+ssid+" lvl="+level);
+                        HashMap<String, String> item = new HashMap<>();
+
+                        item.put(ITEM_KEY, ssid + " " + level);
+                        arraylist.add(item);
+
+                        size--;
+
+                    }
+
+                    adapter.notifyDataSetChanged();
+                }
             }
         }, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
     }
 
-    public void onClick(View view)
-    {
-        arraylist.clear();
-        wifi.startScan();
 
-        Toast.makeText(this, "Scanning...." + size, Toast.LENGTH_SHORT).show();
-        try
-        {
-            size = size - 1;
-            while (size >= 0)
-            {
-                HashMap<String, String> item = new HashMap<String, String>();
-                item.put(ITEM_KEY, results.get(size).level + "," + results.get(size).SSID + ","
-                        + results.get(size).capabilities);
-
-                arraylist.add(item);
-                Collections.reverse(arraylist);
-//                Collections.sort(arraylist, new Comparator<String>() {
-//                    public int compare(String s1, String s2) {
-//                        int secondCommaIdx_s1 = s1.indexOf(',', 1 + s1.indexOf(','));
-//                        int secondCommaIdx_s2 = s2.indexOf(',', 1 + s2.indexOf(','));
-//
-//                        int signalStrength_s1 = Integer.parseInt(s1.substring(secondCommaIdx_s1+1));
-//                        int signalStrength_s2 = Integer.parseInt(s2.substring(secondCommaIdx_s2+1));
-//
-//                        if (signalStrength_s1 >= signalStrength_s2) {
-//                            return -1;
-//                        } else {
-//                            return 1;
-//                        }
-//                    }
-//                });
-                size--;
-                adapter.notifyDataSetChanged();
-
-            }
-        }
-        catch (Exception e)
-        { }
-    }
 }
