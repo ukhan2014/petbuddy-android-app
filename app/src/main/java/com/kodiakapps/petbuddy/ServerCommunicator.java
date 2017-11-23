@@ -2,6 +2,7 @@ package com.kodiakapps.petbuddy;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.widget.Toast;
 
 import java.io.BufferedReader;
@@ -18,7 +19,8 @@ import java.net.UnknownHostException;
  * Created by usman on 11/18/17.
  */
 
-public class ServerCommunicator extends AsyncTask<String,Void,String> {
+public class ServerCommunicator extends AsyncTask<String,String,String> {
+    private final String TAG = "PBD:ServerCommunicator";
     public static String SERVER_IP = "192.168.1.1";
     public static int SERVER_PORT = 8234;
     public Context context;
@@ -28,6 +30,9 @@ public class ServerCommunicator extends AsyncTask<String,Void,String> {
     }
     @Override
     protected String doInBackground(String... params) {
+        String msg2Send = params[0];
+        Log.d(TAG, "ServerCommunicator sending msg: " + msg2Send);
+
         try {
             System.out.println(SERVER_IP);
             InetAddress serverAddr = InetAddress.getByName(SERVER_IP);
@@ -35,9 +40,11 @@ public class ServerCommunicator extends AsyncTask<String,Void,String> {
             Socket socket = new Socket(serverAddr,SERVER_PORT);
             System.out.println("Socket created..");
             //sends the message to the server
-            PrintWriter mBufferOut = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);
-            String msg2Send = "{\"HelloWorld\", \"1234\"}";
+            PrintWriter mBufferOut = new PrintWriter(new BufferedWriter(new OutputStreamWriter(
+                    socket.getOutputStream())), true);
+
             mBufferOut.println(msg2Send);
+            mBufferOut.flush();
 
             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             String result = in.readLine();

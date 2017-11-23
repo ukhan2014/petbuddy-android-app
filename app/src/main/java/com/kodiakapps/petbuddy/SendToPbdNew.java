@@ -40,6 +40,6 @@ public class SendToPbdNew extends AppCompatActivity {
         String regInfo = (String) getIntent().getExtras().get("reginfo");
         Log.d(TAG, "regInfo is: " + regInfo);
 
-        new ServerCommunicator(getApplicationContext()).execute();
+        new ServerCommunicator(getApplicationContext()).execute(regInfo);
     }
 }
