@@ -54,4 +54,8 @@
     <string name="title_tv">Let\'s get your PetBuddy all set up. When ready, hit start below</string>
     <string name="start_btn">start</string>
 
+    <!-- Strings related to ConfirmWiFiSelectionActivity -->
+    <string name="selectedWifi_str">You selected %1$s as your WiFi network, is this correct?</string>
+    <string name="confirm_wifi_btn">Yes</string>
+    <string name="reselect_wifi_btn">No</string>
 </resources>
