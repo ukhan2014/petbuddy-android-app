@@ -60,17 +60,6 @@ public class SearchSSIDs extends Activity {
         setContentView(R.layout.search_ssid);
         mHandler = new Handler();
 
-//        if (savedInstanceState == null) {
-//            Bundle extras = getIntent().getExtras();
-//            if (extras == null) {
-//                serialno = null;
-//            } else {
-//                serialno = extras.getString(DEVICE_SERIAL);
-//            }
-//        } else {
-//            serialno = (String) savedInstanceState.getSerializable(DEVICE_SERIAL);
-//        }
-
         Barcode barcode = (Barcode)(getIntent().getExtras().get("Barcode"));
         serialno = barcode.displayValue;
 
