@@ -48,7 +48,15 @@ public class WifiScanActivity extends Activity
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String item = (String) lv.getItemAtPosition(position).toString();
-                Toast.makeText(parent.getContext(),"You selected : " + item,Toast.LENGTH_SHORT).show();
+                Toast.makeText(parent.getContext(),"You selected : "
+                        + item,Toast.LENGTH_SHORT).show();
+
+                Log.d(TAG, "Picked item=" + item);
+                String ssid = item.substring(5, item.indexOf('}'));
+//                Intent myIntent = new Intent(MainActivity.this, SearchSSIDs.class);
+//                myIntent.putExtra(item, mPetBuddyDeviceSerial);
+//                startActivity(myIntent);
+//                finish();
             }
         });
 
@@ -123,7 +131,7 @@ public class WifiScanActivity extends Activity
                         Log.d(TAG, "size="+size+" ssid="+ssid+" lvl="+level);
                         HashMap<String, String> item = new HashMap<>();
 
-                        item.put(ITEM_KEY, ssid + " " + level);
+                        item.put(ITEM_KEY, ssid);
                         arraylist.add(item);
 
                         size--;
