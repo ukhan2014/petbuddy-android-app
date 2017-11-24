@@ -12,7 +12,6 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.CAMERA" />
 
-
     <application
         android:allowBackup="true"
         android:icon="@mipmap/pb_launcher"
@@ -54,7 +53,8 @@
         <activity android:name=".WifiScanActivity" />
         <activity android:name=".StartActivity" />
         <activity android:name=".SendInfoToPbd" />
-        <activity android:name=".SendToPbdNew"></activity>
+        <activity android:name=".SendToPbdNew" />
+        <activity android:name=".ConfirmWiFiSelectionActivity"></activity>
     </application>
 
 </manifest>
