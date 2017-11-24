@@ -53,10 +53,11 @@ public class WifiScanActivity extends Activity
 
                 Log.d(TAG, "Picked item=" + item);
                 String ssid = item.substring(5, item.indexOf('}'));
-//                Intent myIntent = new Intent(MainActivity.this, SearchSSIDs.class);
-//                myIntent.putExtra(item, mPetBuddyDeviceSerial);
-//                startActivity(myIntent);
-//                finish();
+                Intent myIntent = new Intent(WifiScanActivity.this,
+                        ConfirmWiFiSelectionActivity.class);
+                myIntent.putExtra("ssid", ssid);
+                startActivity(myIntent);
+                finish();
             }
         });
 
