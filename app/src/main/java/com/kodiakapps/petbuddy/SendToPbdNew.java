@@ -37,9 +37,22 @@ public class SendToPbdNew extends AppCompatActivity {
         mTextViewReplyFromServer = (TextView) findViewById(R.id.textView2);
         mTextViewReplyFromServer.setVisibility(View.INVISIBLE);
 
-        String regInfo = (String) getIntent().getExtras().get("reginfo");
-        Log.d(TAG, "regInfo is: " + regInfo);
+        String msgType = (String) getIntent().getExtras().get("type");
+        String info = "";
+        String msg = "";
+        if(msgType.equals("reginfo")) {
+            info = (String) getIntent().getExtras().get("reginfo");
+            msg = msgType.concat("=" + info);
+            Log.d(TAG, "received regInfo: " + info);
+        }
+        else if(msgType.equals("wifiinfo")) {
+            info = (String) getIntent().getExtras().get("wifiinfo");
+            msg = msgType.concat("={"+info+"}");
+            Log.d(TAG, "received wifi info: " + info);
+        }
 
-        new ServerCommunicator(getApplicationContext()).execute(regInfo);
+        Log.d(TAG, "msg=" +msg);
+
+        new ServerCommunicator(getApplicationContext()).execute(msg);
     }
 }
