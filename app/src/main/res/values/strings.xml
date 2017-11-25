@@ -57,5 +57,7 @@
     <!-- Strings related to ConfirmWiFiSelectionActivity -->
     <string name="selectedWifi_str">You selected %1$s as your WiFi network, is this correct?</string>
     <string name="confirm_wifi_btn">Yes</string>
-    <string name="reselect_wifi_btn">No</string>
+    <string name="reselect_wifi_btn">No, go back</string>
+    <string name="enterWifiPwd_str">Awesome! \nEnter the password for %1$s to connect your PetBuddy to the Internet:</string>
+    <string name="submit_btn">submit</string>
 </resources>
