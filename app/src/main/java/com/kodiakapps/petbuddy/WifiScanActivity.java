@@ -28,6 +28,8 @@ public class WifiScanActivity extends Activity
 {
     private final String TAG = "PBD:WiFiScanActivity";
 
+    private BroadcastReceiver wifiReceiver = null;
+
     WifiManager wifi;
     ListView lv;
 
@@ -57,6 +59,7 @@ public class WifiScanActivity extends Activity
                         ConfirmWiFiSelectionActivity.class);
                 myIntent.putExtra("ssid", ssid);
                 startActivity(myIntent);
+                unregisterReceiver(wifiReceiver);
                 finish();
             }
         });
@@ -75,7 +78,7 @@ public class WifiScanActivity extends Activity
                 new String[] { ITEM_KEY }, new int[] { R.id.list_value });
         lv.setAdapter(this.adapter);
 
-        registerReceiver(new BroadcastReceiver()
+        registerReceiver(wifiReceiver = new BroadcastReceiver()
         {
             @Override
             public void onReceive(Context c, Intent intent)
