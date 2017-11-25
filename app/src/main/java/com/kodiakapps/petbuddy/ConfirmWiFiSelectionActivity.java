@@ -5,6 +5,7 @@ import android.content.res.Resources;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Layout;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 
 public class ConfirmWiFiSelectionActivity extends AppCompatActivity {
 
+    private final String TAG = "PBD:ConfirmWiFiSelectionActivity";
     private Resources res;
     private TextView selectedWifiTextView;
     private Button yesBtn;
@@ -29,7 +31,7 @@ public class ConfirmWiFiSelectionActivity extends AppCompatActivity {
 
 
         res = getResources();
-        ssid = (String)(getIntent().getExtras().get("ssid"));
+        ssid = (String) (getIntent().getExtras().get("ssid"));
 
         wifiPwdTextView = (TextView) findViewById(R.id.wifiPwd);
         wifiPwdTextView.setVisibility(View.INVISIBLE);
@@ -62,7 +64,7 @@ public class ConfirmWiFiSelectionActivity extends AppCompatActivity {
 
         noBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View arg0) {
-                Intent myIntent = new Intent(MainActivity.this, WifiScanActivity.class);
+                Intent myIntent = new Intent(getApplicationContext(), WifiScanActivity.class);
                 startActivity(myIntent);
                 finish();
             }
@@ -71,7 +73,17 @@ public class ConfirmWiFiSelectionActivity extends AppCompatActivity {
 
         submitBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View arg0) {
+                String psk = wifiPwdTextView.getText().toString();
+                String wifiinfo = "ssid=".concat(ssid).concat("\npsk=").concat(psk);
 
+                Log.d(TAG, "Built wifi info str:\n" + wifiinfo);
+
+//                Intent myIntent = new Intent(MainActivity.this, SendToPbdNew.class);
+//                myIntent.putExtra("type", "wifiinfo");
+//                myIntent.putExtra("wifiinfo", wifiinfo);
+//                startActivity(myIntent);
+//                finish();
             }
         });
+    }
 }
