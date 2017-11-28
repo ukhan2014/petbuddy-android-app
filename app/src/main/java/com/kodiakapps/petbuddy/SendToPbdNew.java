@@ -47,7 +47,7 @@ public class SendToPbdNew extends AppCompatActivity {
         }
         else if(msgType.equals("wifiinfo")) {
             info = (String) getIntent().getExtras().get("wifiinfo");
-            msg = msgType.concat("={"+info+"}");
+            msg = info;
             Log.d(TAG, "received wifi info: " + info);
         }
 

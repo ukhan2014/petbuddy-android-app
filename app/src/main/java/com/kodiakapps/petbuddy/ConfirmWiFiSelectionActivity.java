@@ -78,11 +78,11 @@ public class ConfirmWiFiSelectionActivity extends AppCompatActivity {
 
                 Log.d(TAG, "Built wifi info str:\n" + wifiinfo);
 
-//                Intent myIntent = new Intent(MainActivity.this, SendToPbdNew.class);
-//                myIntent.putExtra("type", "wifiinfo");
-//                myIntent.putExtra("wifiinfo", wifiinfo);
-//                startActivity(myIntent);
-//                finish();
+                Intent myIntent = new Intent(getApplicationContext(), SendToPbdNew.class);
+                myIntent.putExtra("type", "wifiinfo");
+                myIntent.putExtra("wifiinfo", wifiinfo);
+                startActivity(myIntent);
+                finish();
             }
         });
     }
