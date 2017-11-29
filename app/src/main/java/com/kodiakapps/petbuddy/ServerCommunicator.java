@@ -40,14 +40,16 @@ public class ServerCommunicator extends AsyncTask<String,String,String> {
             Socket socket = new Socket(serverAddr,SERVER_PORT);
             System.out.println("Socket created..");
             //sends the message to the server
-            PrintWriter mBufferOut = new PrintWriter(new BufferedWriter(new OutputStreamWriter(
-                    socket.getOutputStream())), true);
+            PrintWriter mBufferOut = new PrintWriter(socket.getOutputStream(), true);
+            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
             mBufferOut.println(msg2Send);
             mBufferOut.flush();
 
-            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            Log.d(TAG, "trying to read incoming messages");
+
             String result = in.readLine();
+
             System.out.println("result: " + result);
             socket.close();
 
