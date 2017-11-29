@@ -52,7 +52,6 @@
         <activity android:name=".RegisterActivity" />
         <activity android:name=".WifiScanActivity" />
         <activity android:name=".StartActivity" />
-        <activity android:name=".SendInfoToPbd" />
         <activity android:name=".SendToPbdNew" />
         <activity android:name=".ConfirmWiFiSelectionActivity"></activity>
     </application>
