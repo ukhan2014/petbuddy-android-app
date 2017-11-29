@@ -14,6 +14,7 @@ import android.net.NetworkInfo;
 import android.net.NetworkRequest;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiConfiguration;
+import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -52,6 +53,9 @@ public class SearchSSIDs extends Activity {
     boolean exitActivityFirstRun = false;
     int exitActivityRuns = 0;
     private BroadcastReceiver wifiReceiver;
+    WifiInfo info;
+    int previousWifiId;
+    int currentWifiId;
 
     /* Called when the activity is first created. */
     @Override
@@ -75,11 +79,16 @@ public class SearchSSIDs extends Activity {
         iw = (ImageView) findViewById(R.id.status_indicator_light);
         iw.setImageResource(R.drawable.redlight);
 
-
         wifi = (WifiManager) getSystemService(Context.WIFI_SERVICE);
         if (wifi.isWifiEnabled() == false) {
             Toast.makeText(getApplicationContext(), "wifi is disabled..making it enabled", Toast.LENGTH_LONG).show();
             wifi.setWifiEnabled(true);
+        }
+        else {
+            info = wifi.getConnectionInfo(); //get WifiInfo
+            previousWifiId = info.getNetworkId(); //get id of currently connected network
+            wifi.disconnect();
+            wifi.disableNetwork(previousWifiId); //disable current network
         }
 
         Log.d(TAG, "Starting WiFi scan");
@@ -127,6 +136,7 @@ public class SearchSSIDs extends Activity {
                     myWiFiConfig.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.CCMP);
                     myWiFiConfig.allowedProtocols.set(WifiConfiguration.Protocol.RSN);
                     final int res = wifi.addNetwork(myWiFiConfig);
+                    currentWifiId = res;
 
                     final ConnectivityManager connectivityManager  =
                             (ConnectivityManager)getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -146,6 +156,15 @@ public class SearchSSIDs extends Activity {
 
                                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                                     Log.d(TAG, "setting default network to WIFI");
+
+                                    info = wifi.getConnectionInfo(); //get WifiInfo
+                                    previousWifiId = info.getNetworkId(); //get id of currently connected network
+
+                                    if(previousWifiId != res) {
+                                        wifi.disconnect();
+                                        wifi.disableNetwork(previousWifiId); //disable current network
+                                    }
+
                                     ConnectivityManager.setProcessDefaultNetwork(network);
                                     wifi.enableNetwork(res, true);
                                     wifi.reconnect();
@@ -168,13 +187,6 @@ public class SearchSSIDs extends Activity {
                         } catch (UnknownHostException e) {
                             e.printStackTrace();
                         }
-
-
-
-                        //if(isAPNEnabled(getApplicationContext())) {
-//                            Log.d(TAG, "Disabling cell network Internet");
-//                            updateAPN(getApplicationContext(), false);
-                        //}
 
                         unregisterReceiver(wifiReceiver);
                         textStatus.setText("Connected!");
